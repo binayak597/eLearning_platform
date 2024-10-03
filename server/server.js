@@ -9,6 +9,9 @@ import cookieParser from "cookie-parser";
 import { connectToDB } from "./config/connectToDB.js";
 
 
+import authRouter from "./src/features/user/user.routes.js";
+
+
 const app = express();
 
 app.use(express.json());
@@ -18,7 +21,11 @@ app.use(cookieParser());
 
 
 
-app.get("/", (req, res) => res.send("welcome to express server"));
+//api gateways
+
+//requests related to user
+//http://localhost:8080/api/user
+app.use("/api/user", authRouter);
 
 
 const PORT = process.env.PORT || 5000;
