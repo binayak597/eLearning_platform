@@ -11,6 +11,7 @@ import { isAuth } from "../../../middlewares/isAuth.js";
 import { isAdmin } from "../../../middlewares/isAdmin.js";
 import { uploadFiles } from "../../../middlewares/multer.js";
 
+
 const router = Router();
 
 router.post("/course/new", isAuth, isAdmin, uploadFiles, createCourse);
@@ -19,5 +20,6 @@ router.post("/course/:id", isAuth, isAdmin, uploadFiles, addLecture);
 router.delete("/lecture/:id", isAuth, isAdmin, deleteLecture);
 router.get("/stats", isAuth, isAdmin, getAllStats);
 router.get("/all-users", isAuth, isAdmin, getAllUser);
+
 
 export default router;
