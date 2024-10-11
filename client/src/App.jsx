@@ -11,6 +11,11 @@ import About from "./pages/About/About";
 import Account from "./pages/Account/Account";
 import { useAuthContext } from "./context/UserContext";
 import Loading from "./components/loading/Loading";
+import Course from "./pages/Course/Course";
+import CourseDescription from "./pages/CourseDescription/CourseDescription";
+import Dashboard from "./pages/Dashboard/Dashboard";
+import CourseStudy from "./pages/CourseStudy/CourseStudy";
+import Lecture from "./pages/Lecture/Letcure";
 
 function App() {
   const { loading, isAuth, user } = useAuthContext();
@@ -31,9 +36,26 @@ function App() {
             <Route path="/login" element={isAuth ? <Home /> : <Login />} />
             <Route path="/verify" element={isAuth ? <Home /> : <Verify />} />
             <Route path="/about" element={<About />} />
+            <Route path="/courses" element={<Course />} />
             <Route
               path="/account"
               element={isAuth ? <Account user={user} /> : <Login />}
+            />
+            <Route
+              path="/course/:courseId"
+              element={isAuth ? <CourseDescription user={user} /> : <Login />}
+            />
+            <Route
+              path="/:userId/dashboard"
+              element={isAuth ? <Dashboard /> : <Login />}
+            />
+            <Route
+              path="/course/study/:courseId"
+              element={isAuth ? <CourseStudy user={user} /> : <Login />}
+            />
+            <Route
+              path="/lectures/:courseId/"
+              element={isAuth ? <Lecture user={user} /> : <Login />}
             />
           </Routes>
           <Footer />

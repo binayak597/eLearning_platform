@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useAuthContext } from "../../context/UserContext";
 import "./auth.css";
 import { Link, useNavigate } from "react-router-dom";
+import { useCourseContext } from "../../context/CourseContext";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -9,10 +10,12 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const {fetchSubscribedCourses} = useCourseContext();
+
   const loginHandler = async (ev) => {
 
     ev.preventDefault();
-    await loginUser(email, password, navigate);
+    await loginUser(email, password, navigate, fetchSubscribedCourses);
 
   }
   return (

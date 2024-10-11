@@ -15,7 +15,7 @@ import { uploadFiles } from "../../../middlewares/multer.js";
 const router = Router();
 
 router.post("/course/new", isAuth, isAdmin, uploadFiles, createCourse);
-router.delete("/course/:id", isAuth, isAdmin, deleteCourse);
+router.delete("/course/delete/:id", isAuth, isAdmin, deleteCourse);
 router.post("/course/:id", isAuth, isAdmin, uploadFiles, addLecture);
 router.delete("/lecture/:id", isAuth, isAdmin, deleteLecture);
 router.get("/stats", isAuth, isAdmin, getAllStats);

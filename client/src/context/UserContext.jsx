@@ -11,7 +11,7 @@ export const UserContextProvider = ({ children }) => {
   const [btnLoading, setBtnLoading] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  async function loginUser(email, password, navigate) {
+  async function loginUser(email, password, navigate, fetchSubscribedCourses) {
     setBtnLoading(true);
     try {
       const { data } = await axios.post("/api/user/login", {
@@ -24,6 +24,7 @@ export const UserContextProvider = ({ children }) => {
       setUser(data.user);
       setIsAuth(true);
       setBtnLoading(false);
+      fetchSubscribedCourses();
       navigate("/");
     } catch (error) {
       setBtnLoading(false);

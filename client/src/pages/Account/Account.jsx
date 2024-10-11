@@ -29,7 +29,7 @@ const Account = ({ user }) => {
           </p>
 
           <div className="action-btn">
-            <button className="btn flex">
+            <button onClick={() => navigate(`/${user._id}/dashboard`)} className="btn flex">
               <MdDashboard />
               Dashboard
             </button>

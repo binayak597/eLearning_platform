@@ -34,11 +34,16 @@ export const getSingleCourse = async (req, res) => {
 
 export const getMyCourses = async (req, res) => {
   try {
-    const courses = await Courses.find({ _id: req.user.subscription });
+    
+    const courses = await Course.find({_id: {
+      $in: req.user.subscription
+    }});
 
+    console.log(courses);
     return res.status(200).json({
       courses,
     });
+    
   } catch (err) {
     console.error("error in getMyCourses controller -> ", err.message);
     return res.status(500).json({ error: err.message });
