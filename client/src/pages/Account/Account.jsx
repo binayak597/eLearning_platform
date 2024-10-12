@@ -34,6 +34,15 @@ const Account = ({ user }) => {
               Dashboard
             </button>
 
+            {user.role === "admin" && (
+              <button
+                onClick={() => navigate(`/admin/dashboard`)}
+                className="btn flex"
+              >
+                <MdDashboard />
+                Admin Dashboard
+              </button>
+            )}
             <button
               className="btn flex"
               style={{ background: "red" }}

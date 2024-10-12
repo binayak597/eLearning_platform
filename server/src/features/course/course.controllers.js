@@ -39,7 +39,6 @@ export const getMyCourses = async (req, res) => {
       $in: req.user.subscription
     }});
 
-    console.log(courses);
     return res.status(200).json({
       courses,
     });

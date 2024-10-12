@@ -16,6 +16,9 @@ import CourseDescription from "./pages/CourseDescription/CourseDescription";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import CourseStudy from "./pages/CourseStudy/CourseStudy";
 import Lecture from "./pages/Lecture/Letcure";
+import AdminDashBoard from "./components/admin/dashboard/AdminDashBoard";
+import AdminCourses from "./components/admin/courses/AdminCourses";
+import AdminUsers from "./components/admin/users/AdminUsers";
 
 function App() {
   const { loading, isAuth, user } = useAuthContext();
@@ -56,6 +59,18 @@ function App() {
             <Route
               path="/lectures/:courseId/"
               element={isAuth ? <Lecture user={user} /> : <Login />}
+            />
+            <Route
+              path="/admin/dashboard"
+              element={isAuth ? <AdminDashBoard user={user} /> : <Login />}
+            />
+            <Route
+              path="/admin/course"
+              element={isAuth ? <AdminCourses user={user} /> : <Login />}
+            />
+            <Route
+              path="/admin/users"
+              element={isAuth ? <AdminUsers user={user} /> : <Login />}
             />
           </Routes>
           <Footer />
