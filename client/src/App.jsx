@@ -19,6 +19,8 @@ import Lecture from "./pages/Lecture/Letcure";
 import AdminDashBoard from "./components/admin/dashboard/AdminDashBoard";
 import AdminCourses from "./components/admin/courses/AdminCourses";
 import AdminUsers from "./components/admin/users/AdminUsers";
+import ForgotPassword from "./pages/Auth/ForgotPassword";
+import ResetPassword from "./pages/Auth/ResetPassword";
 
 function App() {
   const { loading, isAuth, user } = useAuthContext();
@@ -38,6 +40,8 @@ function App() {
             />
             <Route path="/login" element={isAuth ? <Home /> : <Login />} />
             <Route path="/verify" element={isAuth ? <Home /> : <Verify />} />
+            <Route path="/forgot" element={isAuth ? <Home /> : <ForgotPassword />} />
+            <Route path="/resetpassword/:token" element={isAuth ? <Home /> : <ResetPassword />} />
             <Route path="/about" element={<About />} />
             <Route path="/courses" element={<Course />} />
             <Route

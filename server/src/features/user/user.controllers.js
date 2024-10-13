@@ -2,6 +2,7 @@ import { User } from "./user.schema.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import sendEmail from "../../../utils/sendEmail.js";
+import sendForgotMail from "../../../utils/sendForgotEmail.js";
 
 export const register = async (req, res) => {
   try {
@@ -125,6 +126,75 @@ export const myProfile = async (req, res) => {
     return res.status(200).json({ user });
   } catch (error) {
     console.error("error in myProfile controller -> ", err.message);
+    return res.status(500).json({ error: err.message });
+  }
+};
+
+export const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (!user)
+      return res.status(404).json({
+        message: "No User with this email",
+      });
+
+    const token = jwt.sign({ email }, process.env.FORGOT_PASSWORD_SECRET);
+
+    const data = { email, token };
+
+    await sendForgotMail("E learning", data);
+
+    user.resetPasswordExpire = Date.now() + 1 * 60 * 1000;
+
+    await user.save();
+
+    return res.status(200).json({
+      message: "Reset Password Link is send to you mail",
+    });
+  } catch (err) {
+    console.error("error in forgotPassword controller -> ", err.message);
+    return res.status(500).json({ error: err.message });
+  }
+};
+
+export const resetPassword = async (req, res) => {
+  try {
+    const decodedData = jwt.verify(req.query.token, process.env.FORGOT_PASSWORD_SECRET);
+
+    const user = await User.findOne({ email: decodedData.email });
+
+    if (!user)
+      return res.status(404).json({
+        message: "No user with this email",
+      });
+
+    if (user.resetPasswordExpire === null)
+      return res.status(404).json({
+        message: "Token Expired",
+      });
+
+    if (user.resetPasswordExpire < Date.now()) {
+      return res.status(404).json({
+        message: "Token Expired",
+      });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(req.body.password, salt);
+
+    user.password = hashedPassword;
+
+    user.resetPasswordExpire = null;
+
+    await user.save();
+
+    return res.status(200).json({ message: "Password Reset successfully" });
+
+  } catch (err) {
+    console.error("error in resetPassword controller -> ", err.message);
     return res.status(500).json({ error: err.message });
   }
 };
