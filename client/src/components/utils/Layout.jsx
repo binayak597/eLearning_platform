@@ -1,5 +1,5 @@
 
-import Sidebar from "./SideBar";
+import Sidebar from "./Sidebar";
 import "./common.css";
 
 const Layout = ({ children }) => {
