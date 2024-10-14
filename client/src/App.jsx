@@ -21,6 +21,7 @@ import AdminCourses from "./components/admin/courses/AdminCourses";
 import AdminUsers from "./components/admin/users/AdminUsers";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
 import ResetPassword from "./pages/Auth/ResetPassword";
+import PaymentSuccess from "./pages/paymentsuccess/PaymentSuccess";
 
 function App() {
   const { loading, isAuth, user } = useAuthContext();
@@ -51,6 +52,10 @@ function App() {
             <Route
               path="/course/:courseId"
               element={isAuth ? <CourseDescription user={user} /> : <Login />}
+            />
+            <Route
+              path="/payment-success/:id"
+              element={isAuth ? <PaymentSuccess user={user} /> : <Login />}
             />
             <Route
               path="/:userId/dashboard"
