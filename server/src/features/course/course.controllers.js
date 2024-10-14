@@ -151,6 +151,12 @@ export const paymentVerification = async (req, res) => {
 
       user.subscription.push(course._id);
 
+      await Progress.create({
+        course: course._id,
+        completedLectures: [],
+        user: req.user._id,
+      });
+      
       await user.save();
 
       return res.status(200).json({

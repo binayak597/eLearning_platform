@@ -15,7 +15,7 @@ import Course from "./pages/Course/Course";
 import CourseDescription from "./pages/CourseDescription/CourseDescription";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import CourseStudy from "./pages/CourseStudy/CourseStudy";
-import Lecture from "./pages/Lecture/Letcure";
+import Lecture from "./pages/Lecture/Lecture";
 import AdminDashBoard from "./components/admin/dashboard/AdminDashBoard";
 import AdminCourses from "./components/admin/courses/AdminCourses";
 import AdminUsers from "./components/admin/users/AdminUsers";

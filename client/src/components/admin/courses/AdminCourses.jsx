@@ -13,6 +13,7 @@ const categories = [
   "Game Development",
   "Data Science",
   "Artificial Intelligence",
+  "Cloud Computing"
 ];
 
 const AdminCourses = ({ user }) => {

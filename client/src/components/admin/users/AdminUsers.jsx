@@ -4,9 +4,12 @@ import axios from "axios";
 import Layout from "../../utils/Layout";
 import toast from "react-hot-toast";
 
-const AdminUsers = () => {
+const AdminUsers = ({user}) => {
 
   const [users, setUsers] = useState([]);
+
+
+  if (user && user.mainRole !== "superadmin") return navigate("/");
 
   async function fetchUsers() {
     try {

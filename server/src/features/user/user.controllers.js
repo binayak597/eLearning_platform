@@ -1,8 +1,10 @@
 import { User } from "./user.schema.js";
+import {Progress} from "../course/progress.schema.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import sendEmail from "../../../utils/sendEmail.js";
 import sendForgotMail from "../../../utils/sendForgotEmail.js";
+import { Lecture } from "../course/lecture.schema.js";
 
 export const register = async (req, res) => {
   try {
@@ -197,4 +199,65 @@ export const resetPassword = async (req, res) => {
     console.error("error in resetPassword controller -> ", err.message);
     return res.status(500).json({ error: err.message });
   }
+};
+
+
+export const addProgress = async (req, res) => {
+  
+  try {
+    const progress = await Progress.findOne({
+      user: req.user._id,
+      course: req.query.courseId,
+    });
+  
+    const { lectureId } = req.query;
+  
+    if (progress.completedLectures.includes(lectureId)) {
+      return res.status(200).json({
+        message: "Progress recorded",
+      });
+    }
+  
+    progress.completedLectures.push(lectureId);
+  
+    await progress.save();
+  
+    return res.status(201).json({
+      message: "new Progress added",
+    });
+
+  } catch (err) {
+    console.error("error in addProgress controller -> ", err.message);
+    return res.status(500).json({ message: err.message });
+  }
+};
+
+export const getYourProgress = async (req, res) => {
+
+  try {
+    const progress = await Progress.find({
+    user: req.user._id,
+    course: req.query.courseId,
+  });
+
+  if (!progress) return res.status(404).json({ message: "you haven't started this course lecture yet" });
+
+  const allLectures = (await Lecture.find({ course: req.query.courseId })).length;
+  console.log(progress);
+  const completedLectures = progress[0]?.completedLectures?.length;
+
+  const courseProgressPercentage = (completedLectures * 100) / allLectures;
+
+  return res.status(200).json({
+    courseProgressPercentage,
+    completedLectures,
+    allLectures,
+    progress,
+    allLectures
+  });
+  } catch (err) {
+    console.error("error in getYourProgress controller -> ", err.message);
+    return res.status(500).json({ message: err.message });
+  }
+  
 };

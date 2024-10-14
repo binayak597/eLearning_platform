@@ -5,6 +5,7 @@ import axios from "axios";
 import { server } from "../../main";
 import Loading from "../../components/loading/Loading";
 import toast from "react-hot-toast";
+import { TiTick } from "react-icons/ti";
 
 const Lecture = ({ user }) => {
   const [lectures, setLectures] = useState([]);
@@ -17,6 +18,10 @@ const Lecture = ({ user }) => {
   const [video, setVideo] = useState("");
   const [videoPreview, setVideoPreview] = useState(null);
   const [btnLoading, setBtnLoading] = useState(false);
+  const [completed, setCompleted] = useState("");
+  const [completedLec, setCompletedLec] = useState("");
+  const [lecLength, setLecLength] = useState("");
+  const [progress, setProgress] = useState([]);
 
   const params = useParams();
   const navigate = useNavigate();
@@ -59,6 +64,7 @@ const Lecture = ({ user }) => {
 
   useEffect(() => {
     fetchLectures();
+    fetchProgress();
   }, []);
 
   const changeVideoHandler = (ev) => {
@@ -108,6 +114,46 @@ const Lecture = ({ user }) => {
     }
   };
 
+  const addProgress = async (id) => {
+    try {
+      const { data } = await axios.post(
+        `/api/user/add-progress?courseId=${params.courseId}&lectureId=${id}`,
+        {},
+        {
+          headers: {
+            token: localStorage.getItem("token"),
+          },
+        }
+      );
+      console.log(data.message);
+      fetchProgress();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchProgress = async () => {
+
+    try {
+      const { data } = await axios.get(
+        `/api/user/get-progress?courseId=${params.courseId}`,
+        {
+          headers: {
+            token: localStorage.getItem("token"),
+          },
+        }
+      );
+
+      setCompleted(data.courseProgressPercentage);
+      setCompletedLec(data.completedLectures);
+      setLecLength(data.allLectures);
+      setProgress(data.progress);
+    } catch (error) {
+      console.log(error);
+    }
+
+  }
+
   const deleteHandler = async (id) => {
     if (confirm("Are you sure want to delete this lecture?")) {
       try {
@@ -132,12 +178,17 @@ const Lecture = ({ user }) => {
         <Loading />
       ) : (
         <>
+        <div className="progress">
+            Lecture completed - {completedLec} out of {lecLength} <br />
+            <progress value={completed} max={100}></progress> {completed} %
+          </div>
           <div className="lecture-page">
             <div className="left">
               {lecLoading ? (
                 <Loading />
               ) : (
                 <>
+                
                   {lecture.video ? (
                     <>
                       <video
@@ -148,7 +199,7 @@ const Lecture = ({ user }) => {
                         disablePictureInPicture
                         disableRemotePlayback
                         autoPlay
-                    
+                        onEnded={() => addProgress(lecture._id)}
                       ></video>
                       <h1>{lecture.title}</h1>
                       <h3>{lecture.description}</h3>
@@ -222,7 +273,19 @@ const Lecture = ({ user }) => {
                       }`}
                     >
                       {idx + 1}. {l.title}{" "}
-                      
+                      {progress[0] &&
+                        progress[0]?.completedLectures.includes(l._id) && (
+                          <span
+                            style={{
+                              background: "black",
+                              padding: "2px",
+                              borderRadius: "6px",
+                              color: "green",
+                            }}
+                          >
+                            <TiTick />
+                          </span>
+                        )}
                     </div>
                     {user && user.role === "admin" && (
                       <button
