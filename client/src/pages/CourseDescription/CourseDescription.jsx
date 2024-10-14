@@ -5,6 +5,7 @@ import "./coursedesc.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { server } from "../../main";
 import Loading from "../../components/loading/Loading";
+import axios from "axios";
 
 const CourseDescription = ({ user }) => {
 
