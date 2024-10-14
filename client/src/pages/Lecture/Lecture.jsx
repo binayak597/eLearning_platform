@@ -9,22 +9,22 @@ import { TiTick } from "react-icons/ti";
 
 const Lecture = ({ user }) => {
   const [lectures, setLectures] = useState([]);
-  const [lecture, setLecture] = useState({});
+  const [lecture, setLecture] = useState([]);
   const [loading, setLoading] = useState(true);
   const [lecLoading, setLecLoading] = useState(false);
   const [show, setShow] = useState(false);
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
-  const [video, setVideo] = useState("");
-  const [videoPreview, setVideoPreview] = useState(null);
+  const [video, setvideo] = useState("");
+  const [videoPreview, setVideoPreview] = useState("");
   const [btnLoading, setBtnLoading] = useState(false);
   const [completed, setCompleted] = useState("");
   const [completedLec, setCompletedLec] = useState("");
-  const [lecLength, setLecLength] = useState("");
+  const [lectLength, setLectLength] = useState("");
   const [progress, setProgress] = useState([]);
-
   const params = useParams();
   const navigate = useNavigate();
+  
 
   if (user && user.role !== "admin" && !user.subscription.includes(params.courseId))
     return navigate("/");
@@ -60,11 +60,6 @@ const Lecture = ({ user }) => {
     }
   }
 
-  useEffect(() => {
-    fetchLectures();
-    fetchProgress();
-  }, []);
-
   const changeVideoHandler = (ev) => {
     const file = ev.target.files[0];
     const reader = new FileReader();
@@ -73,7 +68,7 @@ const Lecture = ({ user }) => {
 
     reader.onloadend = () => {
       setVideoPreview(reader.result);
-      setVideo(file);
+      setvideo(file);
     };
   };
 
@@ -103,7 +98,7 @@ const Lecture = ({ user }) => {
       fetchLectures();
       setTitle("");
       setDesc("");
-      setVideo("");
+      setvideo("");
       setVideoPreview("");
     } catch (error) {
       toast.error(error.response.data.message);
@@ -111,48 +106,8 @@ const Lecture = ({ user }) => {
     }
   };
 
-  const addProgress = async (id) => {
-    try {
-      const { data } = await axios.post(
-        `/api/user/add-progress?courseId=${params.courseId}&lectureId=${id}`,
-        {},
-        {
-          headers: {
-            token: localStorage.getItem("token"),
-          },
-        }
-      );
-      console.log(data.message);
-      fetchProgress();
-    } catch (error) {
-      console.log(error.response.data.message);
-    }
-  };
-
-  const fetchProgress = async () => {
-
-    try {
-      const { data } = await axios.get(
-        `/api/user/get-progress?courseId=${params.courseId}`,
-        {
-          headers: {
-            token: localStorage.getItem("token"),
-          },
-        }
-      );
-
-      setCompleted(data.courseProgressPercentage);
-      setCompletedLec(data.completedLectures);
-      setLecLength(data.allLectures);
-      setProgress(data.progress);
-    } catch (error) {
-      console.log(error.response.data.message);
-    }
-
-  }
-
   const deleteHandler = async (id) => {
-    if (confirm("Are you sure want to delete this lecture?")) {
+    if (confirm("Are you sure you want to delete this lecture")) {
       try {
         const { data } = await axios.delete(`/api/admin/lecture/${id}`, {
           headers: {
@@ -168,14 +123,60 @@ const Lecture = ({ user }) => {
     }
   };
 
+  
+
+  async function fetchProgress() {
+    try {
+      const { data } = await axios.get(
+        `/api/user/get-progress?course=${params.courseId}`,
+        {
+          headers: {
+            token: localStorage.getItem("token"),
+          },
+        }
+      );
+
+      setCompleted(data.courseProgressPercentage);
+      setCompletedLec(data.completedLectures);
+      setLectLength(data.allLectures);
+      setProgress(data.progress);
+    } catch (error) {
+      console.log(error.response.data.message);
+    }
+  }
+
+  const addProgress = async (id) => {
+    try {
+      const { data } = await axios.post(
+        `${server}/api/user/add-progress?courseId=${params.courseId}&lectureId=${id}`,
+        {},
+        {
+          headers: {
+            token: localStorage.getItem("token"),
+          },
+        }
+      );
+      console.log(data.message);
+      fetchProgress();
+    } catch (error) {
+      console.log(error.response.data.message);
+    }
+  };
+
+  console.log(progress);
+
+  useEffect(() => {
+    fetchLectures();
+    fetchProgress();
+  }, []);
   return (
     <>
       {loading ? (
         <Loading />
       ) : (
         <>
-        <div className="progress">
-            Lecture completed - {completedLec} out of {lecLength} <br />
+          <div className="progress">
+            Lecture completed - {completedLec} out of {lectLength} <br />
             <progress value={completed} max={100}></progress> {completed} %
           </div>
           <div className="lecture-page">
@@ -184,7 +185,6 @@ const Lecture = ({ user }) => {
                 <Loading />
               ) : (
                 <>
-                
                   {lecture.video ? (
                     <>
                       <video
@@ -221,7 +221,7 @@ const Lecture = ({ user }) => {
                     <input
                       type="text"
                       value={title}
-                      onChange={(ev) => setTitle(ev.target.value)}            
+                      onChange={(ev) => setTitle(ev.target.value)}
                       required
                     />
 
@@ -239,6 +239,7 @@ const Lecture = ({ user }) => {
                       onChange={changeVideoHandler}
                       required
                     />
+
                     {videoPreview && (
                       <video
                         src={videoPreview}
@@ -249,7 +250,8 @@ const Lecture = ({ user }) => {
                     )}
 
                     <button
-                      disabled={btnLoading}   
+                      disabled={btnLoading}
+                      type="submit"
                       className="btn"
                     >
                       {btnLoading ? "Loading" : "Add"}
@@ -265,12 +267,12 @@ const Lecture = ({ user }) => {
                       onClick={() => fetchLecture(l._id)}
                       key={idx}
                       className={`lecture-number ${
-                        lecture._id ===l._id && "active"
+                        lecture._id === l._id && "active"
                       }`}
                     >
                       {idx + 1}. {l.title}{" "}
                       {progress[0] &&
-                        progress[0]?.completedLectures.includes(l._id) && (
+                        progress[0].completedLectures.includes(l._id) && (
                           <span
                             style={{
                               background: "black",
