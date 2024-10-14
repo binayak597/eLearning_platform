@@ -1,6 +1,10 @@
 import dotenv from  "dotenv";
 dotenv.config();
 
+
+//core modules
+import path from 'path';
+
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -13,6 +17,8 @@ import authRouter from "./src/features/user/user.routes.js";
 import courseRouter from "./src/features/course/course.routes.js";
 import adminRouter from "./src/features/admin/admin.routes.js";
 
+
+const __dirname = path.resolve();
 
 const app = express();
 
@@ -40,6 +46,16 @@ app.use("/api/admin", adminRouter);
 
 
 app.use("/server/uploads", express.static("server/uploads"));
+
+app.use(express.static(path.join(__dirname, "/client/dist")));
+
+
+app.use("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "dist", "index.html"));
+});
+
+// handling 404 requests
+app.use((req, res) => res.send("Api is not found"));
 
 const PORT = process.env.PORT || 5000;
 
