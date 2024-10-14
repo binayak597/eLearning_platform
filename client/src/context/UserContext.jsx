@@ -18,7 +18,6 @@ export const UserContextProvider = ({ children }) => {
         email,
         password,
       });
-      if(data.error) throw new Error(data.error);
       toast.success(data.message);
       localStorage.setItem("token", data.token);
       setUser(data.user);
@@ -29,7 +28,7 @@ export const UserContextProvider = ({ children }) => {
     } catch (error) {
       setBtnLoading(false);
       setIsAuth(false);
-      toast.error(error.message);
+      toast.error(error.response.data.message);
     }
   }
 
@@ -42,14 +41,13 @@ export const UserContextProvider = ({ children }) => {
         password,
       });
 
-      if(data.error) throw new Error(data.error);
       toast.success(data.message);
       localStorage.setItem("activationToken", data.activationToken);
       setBtnLoading(false);
       navigate("/verify");
     } catch (error) {
       setBtnLoading(false);
-      toast.error(error.message);
+      toast.error(error.response.data.message);
     }
   }
 
@@ -62,13 +60,12 @@ export const UserContextProvider = ({ children }) => {
         activationToken,
       });
 
-      if(data.error) throw new Error(data.error);
       toast.success(data.message);
       navigate("/login");
       localStorage.clear();
       setBtnLoading(false);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.response.data.message);
       setBtnLoading(false);
     }
   }
@@ -80,12 +77,11 @@ export const UserContextProvider = ({ children }) => {
           token: localStorage.getItem("token"),
         },
       });
-      if(data.error) throw new Error(data.error);
       setIsAuth(true);
       setUser(data.user);
       setLoading(false);
     } catch (error) {
-      console.log(error.message);
+      console.log(error.response.data.message);
       setLoading(false);
     }
   }

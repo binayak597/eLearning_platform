@@ -15,12 +15,11 @@ const ForgotPassword = () => {
     try {
       const { data } = await axios.post("/api/user/forgot", { email });
     
-      if(data.error) throw new Error(data.error);
       toast.success(data.message);
       navigate("/login");
       setBtnLoading(false);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.response.data.message);
       setBtnLoading(false);
     }
   };

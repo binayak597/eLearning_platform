@@ -52,7 +52,7 @@ export const register = async (req, res) => {
     });
   } catch (err) {
     console.error("error in register controller -> ", err.message);
-    return res.status(500).json({ error: err.message });
+    return res.status(500).json({ message: err.message });
   }
 };
 
@@ -83,7 +83,7 @@ export const verifyUser = async (req, res) => {
     });
   } catch (err) {
     console.error("error in verifyUser controller -> ", err.message);
-    return res.status(500).json({ error: err.message });
+    return res.status(500).json({ message: err.message });
   }
 };
 
@@ -116,7 +116,7 @@ export const loginUser = async (req, res) => {
     });
   } catch (err) {
     console.error("error in loginUser controller -> ", err.message);
-    return res.status(500).json({ error: err.message });
+    return res.status(500).json({ message: err.message });
   }
 };
 
@@ -128,7 +128,7 @@ export const myProfile = async (req, res) => {
     return res.status(200).json({ user });
   } catch (error) {
     console.error("error in myProfile controller -> ", err.message);
-    return res.status(500).json({ error: err.message });
+    return res.status(500).json({ message: err.message });
   }
 };
 
@@ -158,7 +158,7 @@ export const forgotPassword = async (req, res) => {
     });
   } catch (err) {
     console.error("error in forgotPassword controller -> ", err.message);
-    return res.status(500).json({ error: err.message });
+    return res.status(500).json({ message: err.message });
   }
 };
 
@@ -197,7 +197,7 @@ export const resetPassword = async (req, res) => {
 
   } catch (err) {
     console.error("error in resetPassword controller -> ", err.message);
-    return res.status(500).json({ error: err.message });
+    return res.status(500).json({ message: err.message });
   }
 };
 

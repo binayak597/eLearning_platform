@@ -19,11 +19,9 @@ const AdminUsers = ({user}) => {
         },
       });
 
-      if(data.error) throw new Error(data.error);
-
       setUsers(data.users);
     } catch (error) {
-      console.log(error.message);
+      console.log(error.response.data.message);
     }
   }
 
@@ -44,11 +42,10 @@ const AdminUsers = ({user}) => {
           }
         );
 
-        if(data.error) throw new Error(data.error);
         toast.success(data.message);
         await fetchUsers();
       } catch (error) {
-        toast.error(error.message);
+        toast.error(error.response.data.message);
       }
     }
   };

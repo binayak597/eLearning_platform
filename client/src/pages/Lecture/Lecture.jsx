@@ -36,11 +36,10 @@ const Lecture = ({ user }) => {
           token: localStorage.getItem("token"),
         },
       });
-      if(data.error) throw new Error(data.error);
       setLectures(data.lectures);
       setLoading(false);
     } catch (error) {
-      console.log(error.message);
+      console.log(error.response.data.message);
       setLoading(false);
     }
   }
@@ -53,11 +52,10 @@ const Lecture = ({ user }) => {
           token: localStorage.getItem("token"),
         },
       });
-      if(data.error) throw new Error(data.error);
       setLecture(data.lecture);
       setLecLoading(false);
     } catch (error) {
-      console.log(error.message);
+      console.log(error.response.data.message);
       setLecLoading(false);
     }
   }
@@ -99,7 +97,6 @@ const Lecture = ({ user }) => {
         }
       );
 
-      if(data.error) throw new Error(data.error);
       toast.success(data.message);
       setBtnLoading(false);
       setShow(false);
@@ -109,7 +106,7 @@ const Lecture = ({ user }) => {
       setVideo("");
       setVideoPreview("");
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.response.data.message);
       setBtnLoading(false);
     }
   };
@@ -128,7 +125,7 @@ const Lecture = ({ user }) => {
       console.log(data.message);
       fetchProgress();
     } catch (error) {
-      console.log(error);
+      console.log(error.response.data.message);
     }
   };
 
@@ -149,7 +146,7 @@ const Lecture = ({ user }) => {
       setLecLength(data.allLectures);
       setProgress(data.progress);
     } catch (error) {
-      console.log(error);
+      console.log(error.response.data.message);
     }
 
   }
@@ -163,11 +160,10 @@ const Lecture = ({ user }) => {
           },
         });
 
-        if(data.error) throw new Error(data.error);
         toast.success(data.message);
         fetchLectures();
       } catch (error) {
-        toast.error(error.message);
+        toast.error(error.response.data.message);
       }
     }
   };

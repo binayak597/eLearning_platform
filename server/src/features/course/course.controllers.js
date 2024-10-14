@@ -15,7 +15,7 @@ export const getAllCourses = async (req, res) => {
     });
   } catch (err) {
     console.error("error in getAllCourses controller -> ", err.message);
-    return res.status(500).json({ error: err.message });
+    return res.status(500).json({ message: err.message });
   }
 };
 
@@ -28,7 +28,7 @@ export const getSingleCourse = async (req, res) => {
     });
   } catch (err) {
     console.error("error in getSingleCourse controller -> ", err.message);
-    return res.status(500).json({ error: err.message });
+    return res.status(500).json({ message: err.message });
   }
 };
 
@@ -45,7 +45,7 @@ export const getMyCourses = async (req, res) => {
     
   } catch (err) {
     console.error("error in getMyCourses controller -> ", err.message);
-    return res.status(500).json({ error: err.message });
+    return res.status(500).json({ message: err.message });
   }
 };
 
@@ -67,7 +67,7 @@ export const fetchLectures = async (req, res) => {
     return res.status(200).json({ lectures });
   } catch (err) {
     console.error("error in fetchLectures controller -> ", err.message);
-    return res.status(500).json({ error: err.message });
+    return res.status(500).json({ message: err.message });
   }
 };
 
@@ -89,7 +89,7 @@ export const fetchLecture = async (req, res) => {
     return res.status(200).json({ lecture });
   } catch (err) {
     console.error("error in fetchLecture controller -> ", err.message);
-    return res.status(500).json({ error: err.message });
+    return res.status(500).json({ message: err.message });
   }
 };
 
@@ -118,7 +118,7 @@ export const checkout = async (req, res) => {
     });
   } catch (err) {
     console.error("error in checkout controller -> ", err.message);
-    return res.status(500).json({ error: err.message });
+    return res.status(500).json({ message: err.message });
   }
 };
 
@@ -169,6 +169,6 @@ export const paymentVerification = async (req, res) => {
     }
   } catch (err) {
     console.error("error in paymentVerification controller -> ", err.message);
-    return res.status(500).json({ error: err.message });
+    return res.status(500).json({ message: err.message });
   }
 };

@@ -19,10 +19,9 @@ const AdminDashbord = ({ user }) => {
         },
       });
 
-      if(data.error) throw new Error(data.error);
       setStats(data.stats);
     } catch (error) {
-      console.log(error.message);
+      console.log(error.response.data.message);
     }
   }
 

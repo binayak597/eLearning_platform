@@ -22,11 +22,10 @@ const CourseCard = ({ course }) => {
           },
         });
 
-        if(data.error) throw new Error(data.error);
         toast.success(data.message);
         await fetchCourses();
       } catch (error) {
-        toast.error(error.message);
+        toast.error(error.response.data.message);
       }
     }
   };

@@ -43,7 +43,7 @@ const ResetPassword = () => {
             onChange={(ev) => setPassword(ev.target.value)}
             required
           />
-          <button disabled={btnLoading} className="common-btn">
+          <button disabled={btnLoading} className="btn">
             {btnLoading ? "Loading" : "Reset Password"}
           </button>
         </form>

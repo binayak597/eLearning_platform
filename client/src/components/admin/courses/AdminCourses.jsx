@@ -65,8 +65,6 @@ const AdminCourses = ({ user }) => {
           token: localStorage.getItem("token"),
         },
       });
-
-      if (data.error) throw new Error(data.error);
       toast.success(data.message);
       setBtnLoading(false);
       await fetchCourses();
@@ -79,7 +77,7 @@ const AdminCourses = ({ user }) => {
       setPrice("");
       setCategory("");
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.response.data.message);
     }
   };
 

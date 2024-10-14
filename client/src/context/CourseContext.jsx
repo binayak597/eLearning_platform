@@ -11,20 +11,18 @@ export const CourseContextProvider = ({ children }) => {
   async function fetchCourses() {
     try {
       const { data } = await axios.get("/api/course/all");
-      if(data.error) throw new Error(data.error);
       setCourses(data.courses);
     } catch (error) {
-      console.log(error.message);
+      console.log(error.response.data.message);
     }
   }
 
   async function fetchCourse(id) {
     try {
       const { data } = await axios.get(`/api/course/${id}`);
-      if(data.error) throw new Error(data.error);
       setCourse(data.course);
     } catch (error) {
-      console.log(error.message);
+      console.log(error.response.data.message);
     }
   }
   
@@ -36,10 +34,9 @@ export const CourseContextProvider = ({ children }) => {
         },
       });
 
-      if(data.error) throw new Error(data.error);
       setSubscribedCourses(data.courses);
     } catch (error) {
-      console.log(error.message);
+      console.log(error.response.data.message);
     }
   }
 
