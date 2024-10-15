@@ -6,6 +6,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { server } from "../../main";
 import Loading from "../../components/loading/Loading";
 import axios from "axios";
+import toast from "react-hot-toast";
+import { useAuthContext } from "../../context/UserContext";
 
 const CourseDescription = ({ user }) => {
 
@@ -13,6 +15,7 @@ const CourseDescription = ({ user }) => {
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
+  const {fetchUser} = useAuthContext();
   const { fetchCourse, course, fetchCourses, fetchSubscribedCourses } = useCourseContext();
 
   useEffect(() => {
@@ -83,6 +86,30 @@ const CourseDescription = ({ user }) => {
     razorpay.open();
   };
 
+  const handleBuyCourse = async() => {
+
+    setLoading(true);
+    try {
+      const {data} = await axios.post(`/api/course/buy-course/${params.courseId}`, {}, {
+        headers: {
+          token: localStorage.getItem("token")
+        }
+      });
+      console.log(data);
+      await fetchUser();
+      await fetchCourses();
+      await fetchSubscribedCourses();
+      setLoading(false);
+      toast.success(data.message);
+      navigate(`/${user._id}/dashboard`);
+      
+    } catch (error) {
+      toast.error(error);
+      console.log(error);
+      setLoading(false);
+    }
+  }
+
   return (
     <>
       {loading ? <Loading />: (
@@ -114,7 +141,7 @@ const CourseDescription = ({ user }) => {
                   Start
                 </button>
               ) : (
-                <button onClick={checkoutHandler} className="btn">
+                <button onClick={handleBuyCourse} className="btn">
                   Buy Now
                 </button>
               )}

@@ -209,16 +209,18 @@ export const addProgress = async (req, res) => {
       user: req.user._id,
       course: req.query.courseId,
     });
+
+    console.log(progress);
   
     const { lectureId } = req.query;
   
-    if (progress.completedLectures.includes(lectureId)) {
+    if (progress.completedLectures?.includes(lectureId)) {
       return res.status(200).json({
         message: "Progress recorded",
       });
     }
   
-    progress.completedLectures.push(lectureId);
+    progress.completedLectures?.push(lectureId);
   
     await progress.save();
   
@@ -240,13 +242,13 @@ export const getYourProgress = async (req, res) => {
     course: req.query.courseId,
   });
 
+
   if (!progress) return res.status(404).json({ message: "you haven't started this course lecture yet" });
 
   const allLectures = (await Lecture.find({ course: req.query.courseId })).length;
-  console.log(progress);
   const completedLectures = progress[0]?.completedLectures?.length;
 
-  const courseProgressPercentage = (completedLectures * 100) / allLectures;
+  const courseProgressPercentage = ((completedLectures * 100) / allLectures).toFixed(1);
 
   return res.status(200).json({
     courseProgressPercentage,

@@ -5,7 +5,8 @@ import { UserContextProvider } from "./context/UserContext";
 import { Toaster } from "react-hot-toast";
 import { CourseContextProvider } from "./context/CourseContext.jsx";
 
-export const server = "https://elearning-platform-ahwt.onrender.com";
+// export const server = "https://elearning-platform-ahwt.onrender.com";
+export const server = "http://localhost:8080";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>

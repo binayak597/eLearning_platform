@@ -128,7 +128,7 @@ const Lecture = ({ user }) => {
   async function fetchProgress() {
     try {
       const { data } = await axios.get(
-        `/api/user/get-progress?course=${params.courseId}`,
+        `/api/user/get-progress?courseId=${params.courseId}`,
         {
           headers: {
             token: localStorage.getItem("token"),
@@ -136,6 +136,7 @@ const Lecture = ({ user }) => {
         }
       );
 
+      console.log(data);
       setCompleted(data.courseProgressPercentage);
       setCompletedLec(data.completedLectures);
       setLectLength(data.allLectures);
@@ -275,8 +276,8 @@ const Lecture = ({ user }) => {
                         progress[0].completedLectures.includes(l._id) && (
                           <span
                             style={{
-                              background: "black",
-                              padding: "2px",
+                              background: "lightgrey",
+                              padding: "6px",
                               borderRadius: "6px",
                               color: "green",
                             }}

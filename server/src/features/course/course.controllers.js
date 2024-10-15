@@ -6,6 +6,7 @@ import { Payment } from "./payment.schema.js";
 import { instance } from "../../../config/razorpayConfig.js";
 
 import crypto from "crypto";
+import { Progress } from "./progress.schema.js";
 
 export const getAllCourses = async (req, res) => {
   try {
@@ -172,3 +173,35 @@ export const paymentVerification = async (req, res) => {
     return res.status(500).json({ message: err.message });
   }
 };
+
+
+export const buyCourse = async (req, res) => {
+
+  try {
+    const user = await User.findById(req.user._id);
+    const course = await Course.findById(req.params.id);
+
+    if (user.subscription?.includes(course._id)) {
+      return res.status(400).json({
+        message: "You have already enrolled this course",
+      });
+    }
+
+    user.subscription?.push(course._id);
+
+      await Progress.create({
+        course: course._id,
+        completedLectures: [],
+        user: req.user._id,
+      });
+      
+      await user.save();
+
+      return res.status(200).json({
+        message: "Course Purchased Successfully",
+      });
+  } catch (err) {
+    console.error("error in buyCourse controller -> ", err.message);
+    return res.status(500).json({ message: err.message });
+  }
+}
